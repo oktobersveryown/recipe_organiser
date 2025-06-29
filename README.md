@@ -36,11 +36,10 @@ Visit [http://localhost:5000](http://localhost:5000) in your browser to use the 
 - All your own recipes are stored locally.
 
 ## TODO
-- [ ] Add theme support for the application.
-- [ ] Implement dark mode for improved night-time usability.
+- [x] Add theme support for the application.
+- [x] Implement dark mode for improved night-time usability.
 - [ ] Implement a better light mode for better readability in bright environments.
-- [ ] Add a toggle or automatic switching between dark and light modes.
-- [ ] Ensure theme settings persist across sessions.
-- [ ] Update documentation to reflect theme features.
+- [x] Add a toggle or automatic switching between dark and light modes.
+- [x] Ensure theme settings persist across sessions.
 
 Feel free to contribute or suggest improvements!
