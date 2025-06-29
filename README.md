@@ -35,4 +35,12 @@ Visit [http://localhost:5000](http://localhost:5000) in your browser to use the 
 - The app uses [TheMealDB API](https://www.themealdb.com/) for fetching public recipes.
 - All your own recipes are stored locally.
 
+## TODO
+- [ ] Add theme support for the application.
+- [ ] Implement dark mode for improved night-time usability.
+- [ ] Implement a better light mode for better readability in bright environments.
+- [ ] Add a toggle or automatic switching between dark and light modes.
+- [ ] Ensure theme settings persist across sessions.
+- [ ] Update documentation to reflect theme features.
+
 Feel free to contribute or suggest improvements!
