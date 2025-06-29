@@ -1,0 +1,37 @@
+{# templates/public_recipe_list_partial.html #}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% if meal_results %}
+    {% for meal in meal_results %}
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col">
+        {% if meal.strMealThumb %}
+        <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}" class="w-full h-48 object-cover rounded-md mb-4">
+        {% endif %}
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">{{ meal.strMeal }}</h2>
+        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">Category: {{ meal.strCategory or 'N/A' }}</p>
+        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">Area: {{ meal.strArea or 'N/A' }}</p>
+
+        <div class="mt-auto flex justify-end space-x-3">
+            <a href="{{ url_for('public_recipe_detail', meal_id=meal.idMeal) }}"
+                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
+                View Details
+            </a>
+            {% if current_user.is_authenticated %}
+            <form action="{{ url_for('import_public_recipe', meal_id=meal.idMeal) }}" method="POST">
+                <button type="submit"
+                    class="inline-flex items-center px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600">Import</button>
+            </form>
+            {% else %}
+            {# Optional: Add a disabled button or text for non-logged-in users #}
+            <button disabled
+                class="inline-flex items-center px-4 py-2 bg-gray-400 text-white text-sm font-medium rounded-md cursor-not-allowed">Sign
+                in to Import</button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-span-full text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <p class="text-xl text-gray-600 dark:text-gray-300">No public recipes found matching your search. Try a different query!</p>
+    </div>
+    {% endif %}
+</div>

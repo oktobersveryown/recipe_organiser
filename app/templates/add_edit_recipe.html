@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ form_title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">{{ form_title }}</h1>
+
+    <form method="POST"
+        action="{% if recipe %}{{ url_for('edit_recipe', recipe_id=recipe.id) }}{% else %}{{ url_for('add_recipe') }}{% endif %}">
+        <div class="mb-5">
+            <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">Recipe Name</label>
+            <input type="text" id="name" name="name"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                value="{{ recipe.name if recipe else '' }}" required>
+        </div>
+
+        <div class="mb-5">
+            <label for="ingredients" class="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">Ingredients</label>
+            <textarea id="ingredients" name="ingredients" rows="6"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                required>{{ recipe.ingredients if recipe else '' }}</textarea>
+            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Separate ingredients by commas or new lines.</p>
+        </div>
+
+        <div class="mb-6">
+            <label for="instructions" class="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">Instructions</label>
+            <textarea id="instructions" name="instructions" rows="10"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                required>{{ recipe.instructions if recipe else '' }}</textarea>
+            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Provide clear, step-by-step instructions.</p>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                {{ 'Update Recipe' if recipe else 'Add Recipe' }}
+            </button>
+            <a href="{{ url_for('index') }}"
+                class="inline-block align-baseline font-bold text-sm text-blue-500 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

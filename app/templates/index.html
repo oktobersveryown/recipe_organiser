@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<h1 class="text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-8 text-center">Your Collected Recipes</h1>
+
+<div id="myRecipesContainer"> {# Container for live search results #}
+    {% if recipes %}
+    {% include 'recipe_list_partial.html' %} {# Initial load of user recipes #}
+    {% else %}
+    <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-4">You haven't added any recipes yet.</p>
+        <p class="text-lg text-gray-600 dark:text-gray-300">Start by adding your first recipe or importing from public search!</p>
+        <a href="{{ url_for('add_recipe') }}"
+            class="mt-6 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300">
+            Add Your First Recipe
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Public Recipe Search Section for Authenticated Users -->
+<div class="mt-12">
+    <div class="max-w-xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">Discover New Recipes</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6 text-center">Search for public recipes to add to your collection!</p>
+
+        <form method="POST" action="{{ url_for('search_public_recipes') }}" id="publicSearchFormAuth"
+            class="flex flex-col sm:flex-row gap-4">
+            <input type="text" name="query" placeholder="e.g., pasta, chicken, dessert"
+                class="flex-grow shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+                required>
+            <button type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                Search Public Recipes
+            </button>
+        </form>
+    </div>
+
+    <div id="publicSearchResultsAuth" class="mt-8">
+        <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <p class="text-xl text-gray-600 dark:text-gray-300">Enter a query above to discover new recipes!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const publicSearchFormAuth = document.getElementById('publicSearchFormAuth');
+        const publicSearchResultsAuth = document.getElementById('publicSearchResultsAuth');
+
+        if (publicSearchFormAuth && publicSearchResultsAuth) {
+            publicSearchFormAuth.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const formData = new FormData(publicSearchFormAuth);
+                fetch(publicSearchFormAuth.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        publicSearchResultsAuth.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching public recipes:', error);
+                        publicSearchResultsAuth.innerHTML = '<div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-md"><p class="text-xl text-red-500">Error searching recipes. Please try again.</p></div>';
+                    });
+            });
+        }
+    });
+</script>
+
+{% else %}
+<div class="max-w-xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">Search Public Recipes</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-6 text-center">Find amazing recipes online and sign up to save your favorites!</p>
+
+    <form method="POST" action="{{ url_for('search_public_recipes') }}" id="publicSearchForm"
+        class="flex flex-col sm:flex-row gap-4">
+        <input type="text" name="query" placeholder="e.g., pasta, chicken, dessert"
+            class="flex-grow shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+            required>
+        <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+            Search
+        </button>
+    </form>
+</div>
+
+<div id="publicSearchResults" class="mt-8">
+    <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <p class="text-xl text-gray-600 dark:text-gray-300">Enter a query above to search for public recipes!</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const publicSearchForm = document.getElementById('publicSearchForm');
+        const publicSearchResults = document.getElementById('publicSearchResults');
+
+        if (publicSearchForm && publicSearchResults) {
+            publicSearchForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const formData = new FormData(publicSearchForm);
+                fetch(publicSearchForm.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        publicSearchResults.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching public recipes:', error);
+                        publicSearchResults.innerHTML = '<div class="text-center py-12 bg-white rounded-lg shadow-md"><p class="text-xl text-red-500">Error searching recipes. Please try again.</p></div>';
+                    });
+            });
+        }
+    });
+</script>
+
+{% endif %}
+{% endblock %}

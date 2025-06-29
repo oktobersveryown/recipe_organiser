@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Public Recipes{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Search Public Recipes</h1>
+
+    <form method="POST" action="{{ url_for('search_public_recipes') }}" class="flex flex-col sm:flex-row gap-4">
+        <input type="text" name="query" placeholder="e.g., pasta, chicken, dessert"
+            class="flex-grow shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
+            value="{{ query if query }}" required>
+        <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+            Search
+        </button>
+    </form>
+</div>
+
+{% if meal_results is not none %}
+{% if meal_results %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for meal in meal_results %}
+    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col">
+        {% if meal.strMealThumb %}
+        <img src="{{ meal.strMealThumb }}" alt="{{ meal.strMeal }}" class="w-full h-48 object-cover rounded-md mb-4">
+        {% endif %}
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ meal.strMeal }}</h2>
+        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Category: {{ meal.strCategory or 'N/A' }}</p>
+        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Area: {{ meal.strArea or 'N/A' }}</p>
+
+        <div class="mt-auto flex justify-end space-x-3">
+            <a href="{{ url_for('public_recipe_detail', meal_id=meal.idMeal) }}"
+                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
+                View Details
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-12 bg-white rounded-lg shadow-md">
+    <p class="text-xl text-gray-600">No public recipes found matching your search. Try a different query!</p>
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock %}
