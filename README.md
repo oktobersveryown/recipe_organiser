@@ -41,5 +41,8 @@ Visit [http://localhost:5000](http://localhost:5000) in your browser to use the 
 - [ ] Implement a better light mode for better readability in bright environments.
 - [x] Add a toggle or automatic switching between dark and light modes.
 - [x] Ensure theme settings persist across sessions.
+- [x] Implement favicon
+    - [ ] Dark and Light Mode Change
+        - [x] Dark and Light Favicons added.
 
 Feel free to contribute or suggest improvements!
